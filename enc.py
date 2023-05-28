@@ -47,11 +47,11 @@ class Enc():
                         shuffle=True,
                         validation_data=(x_test, x_test))
     
-    def save(self, save_dir='./'):
+    def save(self, save_dir='./encoder'):
         self.autoencoder.decoder.save_weights(os.path.join(save_dir, 'saved_decoder'))
         self.autoencoder.encoder.save_weights(os.path.join(save_dir, 'saved_encoder'))
         
-    def load(self, save_dir='./'):
+    def load(self, save_dir='./encoder'):
         self.autoencoder.decoder.load_weights(os.path.join(save_dir, 'saved_decoder'))
         self.autoencoder.encoder.load_weights(os.path.join(save_dir, 'saved_encoder'))
         
@@ -95,7 +95,7 @@ if __name__ == '__main__':
     n = len(G.nodes)
     
     O = []
-    for t in notebook.tqdm(T):
+    for t in tqdm(T):
         obs = np.zeros((n, ), dtype=np.float32)
         p = get_shortest_path(t[0], t[1])
         for i in p:
