@@ -78,32 +78,33 @@ class LNEnv(Env):
         self.current_observation[self.target_pos_idx] = 10
         self.current_observation[self.agent_pos_idx] = 10
         
-        try:
+        for i in range(5):
+            try:
         
-            direction = (action[0] + 1) / 2       
-            action = action[1:]
+                direction = (action[0] + 1) / 2       
+                action = action[1:]
 
-            idx = np.nonzero(action > 0)[0]
-            act = [self.idx_to_id[i] for i in idx]
-            idx = np.argsort(itemgetter(*idx)(action))
-            action = itemgetter(*idx)(act)
+                idx = np.nonzero(action > 0)[0]
+                act = [self.idx_to_id[i] for i in idx]
+                idx = np.argsort(itemgetter(*idx)(action))
+                action = itemgetter(*idx)(act)
 
-            while True:
-                neighbors = [n for n in action if n in self.g.neighbors(self.path[-1]) and n not in self.path]
-                if len(neighbors):
-                    next_node = neighbors[int(direction * (len(neighbors) - 1))]
-                    self.path += [next_node]
-                    self.current_observation[self.id_to_idx[next_node]] = 10            
-                else:
-                    break
+                while True:
+                    neighbors = [n for n in action if n in self.g.neighbors(self.path[-1]) and n not in self.path]
+                    if len(neighbors):
+                        next_node = neighbors[int(direction * (len(neighbors) - 1))]
+                        self.path += [next_node]
+                        self.current_observation[self.id_to_idx[next_node]] = 10            
+                    else:
+                        break
 
-            if self.train:
-                    self.heatmap += self.path
-                    reward += self.compute_reward() 
-                    self.reward.append(reward)     
-        except:
-            print('step error!')
-            pass     
+                if self.train:
+                        self.heatmap += self.path
+                        reward += self.compute_reward() 
+                        self.reward.append(reward)     
+                        
+            except:
+                print(f'step error, retry..{i+1}')    
         
         self.current_observation = self.enc.encode(self.current_observation)
         
