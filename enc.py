@@ -102,7 +102,7 @@ if __name__ == '__main__':
             obs[id_to_idx[i]] = 10
         O.append(obs)   
 
-    x_train, x_test = O[:6000], O[6000:]
+    x_train, x_test = O[:8000], O[8000:]
     x_train = tf.convert_to_tensor(x_train) 
     x_test = tf.convert_to_tensor(x_test) 
        
